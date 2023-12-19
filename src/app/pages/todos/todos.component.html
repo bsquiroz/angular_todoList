@@ -1,0 +1,43 @@
+<section>
+    <form class="todo__form">
+        <label class="form__control">
+            Title todo
+            <input type="text" placeholder="ej: angular">
+        </label>
+
+        <label class="form__control">
+            Desciption todo
+            <input type="text" placeholder="ej: Debo aprender angular">
+        </label>
+
+        <button class="btn">Create todo</button>
+    </form>
+
+    <section>
+        <h2>Lista de tareas</h2>
+
+        <ul class="todos">
+            @for (todo of todos; track todo.id) {
+            <li class="todo">
+                <div>
+                    <p class="todo_title">
+                        {{todo.title}}
+                    </p>
+                    <button [class]="'btn ' + (todo.stateTodo ? 'todo_completed' : 'todo_Nocompleted')">
+                        @if (todo.stateTodo) {
+                        Completada
+                        } @else {
+                        Sin completar
+                        }
+                    </button>
+                    <p class="todo_dec">{{todo.desc}}</p>
+                </div>
+                <div class="options">
+                    <button class="btn btn_edit">Editar</button>
+                    <button class="btn btn_delete">Eliminar</button>
+                </div>
+            </li>
+            }
+        </ul>
+    </section>
+</section>
