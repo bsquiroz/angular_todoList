@@ -19,6 +19,7 @@ import {
 export class TodosComponent implements OnInit {
     public todos: Todo[] = [];
     public todoForm!: FormGroup;
+    public currentTodoUpdate?: Todo;
 
     private todoService = inject(TodosService);
     private formBuilder = inject(FormBuilder);
@@ -27,7 +28,6 @@ export class TodosComponent implements OnInit {
         this.todos = this.todoService.getTodos();
 
         this.todoForm = this.initForm();
-        // this.onPathValue();
     }
 
     getTodos(): Todo[] {
@@ -58,13 +58,23 @@ export class TodosComponent implements OnInit {
     }
 
     onSubmit() {
-        const newTodo: Todo = {
-            id: crypto.randomUUID(),
-            stateTodo: false,
-            ...this.todoForm.value,
-        };
+        if (this.currentTodoUpdate) {
+            const updateTodo: Todo = {
+                ...this.currentTodoUpdate,
+                ...this.todoForm.value,
+            };
 
-        this.createTodo(newTodo);
+            this.updateTodo(this.currentTodoUpdate.id, updateTodo);
+            this.currentTodoUpdate = undefined;
+        } else {
+            const newTodo: Todo = {
+                id: crypto.randomUUID(),
+                stateTodo: false,
+                ...this.todoForm.value,
+            };
+
+            this.createTodo(newTodo);
+        }
         this.todoForm.reset();
     }
 
@@ -72,6 +82,14 @@ export class TodosComponent implements OnInit {
         this.todoForm.patchValue({
             title: 'perro perro',
             desc: 'que mas pues',
+        });
+    }
+
+    handleUpdate(todo: Todo) {
+        this.currentTodoUpdate = todo;
+        this.todoForm.patchValue({
+            title: this.currentTodoUpdate.title,
+            desc: this.currentTodoUpdate.desc,
         });
     }
 

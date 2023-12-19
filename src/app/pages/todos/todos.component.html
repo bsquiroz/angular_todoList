@@ -1,5 +1,12 @@
 <section>
     <form class="todo__form" (ngSubmit)="onSubmit()" [formGroup]="todoForm">
+        <h2>
+            @if (currentTodoUpdate) {
+            Editar todo
+            } @else {
+            Crear todo
+            }
+        </h2>
         <label class="form__control">
             Title todo
             <input type="text" placeholder="ej: angular" formControlName="title">
@@ -19,7 +26,13 @@
             }
         </label>
 
-        <button class="btn" [disabled]="todoForm.invalid">Create todo</button>
+        <button [class]="'btn ' + (currentTodoUpdate ? 'btn_update' : 'btn_create')" [disabled]="todoForm.invalid">
+            @if (currentTodoUpdate) {
+            Update todo
+            }@else {
+            Create todo
+            }
+        </button>
     </form>
 
     <section>
@@ -44,7 +57,7 @@
                     <p class="todo_dec">{{todo.desc}}</p>
                 </div>
                 <div class="options">
-                    <button class="btn btn_edit">Editar</button>
+                    <button class="btn btn_edit" (click)="handleUpdate(todo)">Editar</button>
                     <button class="btn btn_delete" (click)="deleteTodo(todo.id)">Eliminar</button>
                 </div>
             </li>

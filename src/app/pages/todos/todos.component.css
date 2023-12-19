@@ -73,3 +73,10 @@
     padding: 5px;
     border-radius: 5px;
 }
+
+.btn_update {
+    background-color: yellow;
+}
+.btn_create {
+    background-color: lightgreen;
+}
