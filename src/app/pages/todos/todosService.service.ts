@@ -25,12 +25,24 @@ export class TodosService {
     }
 
     updateTodo(id: string, todoUpdate: Todo) {
-        this.todos.map((todo) => (todo.id === id ? { ...todoUpdate } : todo));
+        this.todos = this.todos.map((todo) =>
+            todo.id === id ? { ...todoUpdate } : todo
+        );
         this.updateLocalStorage();
+        return this.todos;
     }
 
     deleteTodo(id: string) {
-        this.todos.filter((todo) => todo.id !== id);
+        this.todos = this.todos.filter((todo) => todo.id !== id);
         this.updateLocalStorage();
+        return this.todos;
+    }
+
+    completeStateTodo(id: string) {
+        this.todos = this.todos.map((todo) =>
+            todo.id === id ? { ...todo, stateTodo: !todo.stateTodo } : todo
+        );
+        this.updateLocalStorage();
+        return this.todos;
     }
 }

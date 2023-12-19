@@ -1,20 +1,30 @@
 <section>
-    <form class="todo__form">
+    <form class="todo__form" (ngSubmit)="onSubmit()" [formGroup]="todoForm">
         <label class="form__control">
             Title todo
-            <input type="text" placeholder="ej: angular">
+            <input type="text" placeholder="ej: angular" formControlName="title">
+            @if (todoForm.get('title')?.touched && todoForm.get('title')?.errors?.['required']) {
+            <p class="control__error">Este campo es requerido</p>
+            }
+            @if (todoForm.get('title')?.touched && todoForm.get('title')?.errors?.['minlength']) {
+            <p class="control__error">Minimo 5 caracteres</p>
+            }
         </label>
 
         <label class="form__control">
             Desciption todo
-            <input type="text" placeholder="ej: Debo aprender angular">
+            <input type="text" placeholder="ej: Debo aprender angular" formControlName="desc">
+            @if (todoForm.get('desc')?.touched && todoForm.get('name')?.errors?.['required']) {
+            <p class="control__error">Este campo es requerido</p>
+            }
         </label>
 
-        <button class="btn">Create todo</button>
+        <button class="btn" [disabled]="todoForm.invalid">Create todo</button>
     </form>
 
     <section>
         <h2>Lista de tareas</h2>
+
 
         <ul class="todos">
             @for (todo of todos; track todo.id) {
@@ -23,7 +33,8 @@
                     <p class="todo_title">
                         {{todo.title}}
                     </p>
-                    <button [class]="'btn ' + (todo.stateTodo ? 'todo_completed' : 'todo_Nocompleted')">
+                    <button (click)="completeStateTodo(todo.id)"
+                        [class]="'btn ' + (todo.stateTodo ? 'todo_completed' : 'todo_Nocompleted')">
                         @if (todo.stateTodo) {
                         Completada
                         } @else {
@@ -34,9 +45,11 @@
                 </div>
                 <div class="options">
                     <button class="btn btn_edit">Editar</button>
-                    <button class="btn btn_delete">Eliminar</button>
+                    <button class="btn btn_delete" (click)="deleteTodo(todo.id)">Eliminar</button>
                 </div>
             </li>
+            }@empty {
+            <p>No hay tareas que mostrar</p>
             }
         </ul>
     </section>
