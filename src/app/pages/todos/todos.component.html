@@ -2,13 +2,13 @@
     <form class="todo__form" (ngSubmit)="onSubmit()" [formGroup]="todoForm">
         <h2>
             @if (currentTodoUpdate) {
-            Editar todo
+            Editar tarea
             } @else {
-            Crear todo
+            Crear tarea
             }
         </h2>
         <label class="form__control">
-            Title todo
+            Titulo tarea
             <input type="text" placeholder="ej: angular" formControlName="title">
             @if (todoForm.get('title')?.touched && todoForm.get('title')?.errors?.['required']) {
             <p class="control__error">Este campo es requerido</p>
@@ -19,7 +19,7 @@
         </label>
 
         <label class="form__control">
-            Desciption todo
+            Descripción tarea
             <input type="text" placeholder="ej: Debo aprender angular" formControlName="desc">
             @if (todoForm.get('desc')?.touched && todoForm.get('desc')?.errors?.['required']) {
             <p class="control__error">Este campo es requerido</p>
@@ -27,7 +27,7 @@
         </label>
 
         <label class="form__control">
-            Dificultad todo
+            Dificultad tarea
             <select formControlName="difficulty">
                 <option disabled>Escoge uno</option>
                 <option value="easy">Fácil</option>
@@ -42,19 +42,24 @@
 
         <button [class]="'btn ' + (currentTodoUpdate ? 'btn_update' : 'btn_create')" [disabled]="todoForm.invalid">
             @if (currentTodoUpdate) {
-            Update todo
+            Editar tarea
             }@else {
-            Create todo
+            Crear tarea
             }
         </button>
     </form>
 
     <section>
         <div class="header__todos">
-            <h2>Lista de tareas</h2>
+            <div>
+                <h2>Lista de tareas</h2>
+                @if (todos().length) {
+                <h4>Cantidad de tareas <span>{{todos().length}}</span></h4>
+                }
+            </div>
             @if (todos().length) {
             <div class="content_filtros">
-                <h5 class="filters__title" (click)="handleShowFilters(true)">
+                <h5 class="filters__title" (click)="showFilters ? handleShowFilters(false) : handleShowFilters(true)">
                     <i class='bx bx-filter'></i>
                     Filtros
                 </h5>

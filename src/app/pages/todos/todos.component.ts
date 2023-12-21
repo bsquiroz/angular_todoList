@@ -23,7 +23,12 @@ export class TodosComponent implements OnInit {
     public todos = signal(this.todoService.getTodos());
     public filter = signal<typeFilter>('all');
 
-    todosFilteres = computed(() => {
+    public showFilters = false;
+
+    public todoForm!: FormGroup;
+    public currentTodoUpdate?: Todo;
+
+    public todosFilteres = computed(() => {
         const filter = this.filter();
         const todoList = this.todos();
 
@@ -46,21 +51,8 @@ export class TodosComponent implements OnInit {
         return todoList;
     });
 
-    public showFilters = false;
-
-    public todoForm!: FormGroup;
-    public currentTodoUpdate?: Todo;
-
     ngOnInit(): void {
         this.todoForm = this.initForm();
-    }
-
-    getTodos(): Todo[] {
-        return this.todoService.getTodos();
-    }
-
-    getTodo(id: string): Todo | undefined {
-        return this.todoService.getTodo(id);
     }
 
     createTodo(todo: Todo) {
