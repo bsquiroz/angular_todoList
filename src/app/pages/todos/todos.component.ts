@@ -20,8 +20,31 @@ export class TodosComponent implements OnInit {
     private todoService = inject(TodosService);
     private formBuilder = inject(FormBuilder);
 
-    public todosFlag = this.todoService.getTodos();
-    public todos = this.todoService.getTodos();
+    public todos = signal(this.todoService.getTodos());
+    public filter = signal<typeFilter>('all');
+
+    todosFilteres = computed(() => {
+        const filter = this.filter();
+        const todoList = this.todos();
+
+        if (filter === 'easy' || filter === 'medium' || filter === 'hard') {
+            this.handleShowFilters(false);
+            return todoList.filter((todo) => todo.difficulty === filter);
+        }
+
+        if (filter === 'completed') {
+            this.handleShowFilters(false);
+            return todoList.filter((todo) => todo.stateTodo);
+        }
+
+        if (filter === 'nocompleted') {
+            this.handleShowFilters(false);
+            return todoList.filter((todo) => !todo.stateTodo);
+        }
+
+        this.handleShowFilters(false);
+        return todoList;
+    });
 
     public showFilters = false;
 
@@ -45,18 +68,18 @@ export class TodosComponent implements OnInit {
     }
 
     updateTodo(id: string, todoUpdate: Todo) {
-        this.todos = this.todoService.updateTodo(id, todoUpdate);
+        this.todos.update(() => this.todoService.updateTodo(id, todoUpdate));
     }
 
     deleteTodo(id: string) {
         const res = confirm('Seguro que quieres eliminar esta tarea');
         if (!res) return;
 
-        this.todos = this.todoService.deleteTodo(id);
+        this.todos.update(() => this.todoService.deleteTodo(id));
     }
 
     completeStateTodo(id: string) {
-        this.todos = this.todoService.completeStateTodo(id);
+        this.todos.update(() => this.todoService.completeStateTodo(id));
     }
 
     onSubmit() {
@@ -97,24 +120,8 @@ export class TodosComponent implements OnInit {
         });
     }
 
-    handleFilters(type: typeFilter) {
-        if (type === 'easy' || type === 'medium' || type === 'hard') {
-            this.todos = this.getTodos().filter(
-                (todo) => todo.difficulty === type
-            );
-        } else if (type === 'completed') {
-            this.todos = this.getTodos().filter((todo) => todo.stateTodo);
-        } else if (type === 'nocompleted') {
-            this.todos = this.getTodos().filter((todo) => !todo.stateTodo);
-        } else if (type === 'all') {
-            this.todos = this.getTodos();
-        }
-
-        this.handleShowFilters();
-    }
-
-    handleShowFilters() {
-        this.showFilters = !this.showFilters;
+    handleShowFilters(value: boolean) {
+        this.showFilters = value;
     }
 
     initForm(): FormGroup {

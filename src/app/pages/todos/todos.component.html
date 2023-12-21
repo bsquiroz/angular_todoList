@@ -52,27 +52,27 @@
     <section>
         <div class="header__todos">
             <h2>Lista de tareas</h2>
-            @if (todosFlag.length) {
+            @if (todos().length) {
             <div class="content_filtros">
-                <h5 class="filters__title" (click)="handleShowFilters()">
+                <h5 class="filters__title" (click)="handleShowFilters(true)">
                     <i class='bx bx-filter'></i>
                     Filtros
                 </h5>
 
                 <ul [class]="'filters ' + (showFilters && 'filters--show')">
-                    <li (click)="handleFilters('easy')">Todos faciles</li>
-                    <li (click)="handleFilters('medium')">Todos normales</li>
-                    <li (click)="handleFilters('hard')">Todos dificiles</li>
-                    <li (click)="handleFilters('completed')">Todos completados</li>
-                    <li (click)="handleFilters('nocompleted')">Todos sin completar</li>
-                    <li (click)="handleFilters('all')">Mostrarlos todos</li>
+                    <li (click)="filter.set('easy')">Todos faciles</li>
+                    <li (click)="filter.set('medium')">Todos normales</li>
+                    <li (click)="filter.set('hard')">Todos dificiles</li>
+                    <li (click)="filter.set('completed')">Todos completados</li>
+                    <li (click)="filter.set('nocompleted')">Todos sin completar</li>
+                    <li (click)="filter.set('all')">Mostrarlos todos</li>
                 </ul>
             </div>
             }
         </div>
 
         <ul class="todos">
-            @for (todo of todos; track todo.id) {
+            @for (todo of todosFilteres(); track todo.id) {
             <li class="todo">
                 <div class="todo__info">
                     <p class="todo_title">
