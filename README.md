@@ -1,27 +1,34 @@
-# TodoListNossr
+# Lista de Tareas en Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.7.
+### [Demo de la app](https://todoangularbs.netlify.app)
 
-## Development server
+![](./imgPrincipal.png)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+La aplicación de Lista de Tareas en Angular ofrece una interfaz intuitiva para gestionar tareas con tres campos principales:
 
-## Code scaffolding
+-   **Título:** Breve descripción de la tarea.
+-   **Descripción:** Detalles adicionales sobre la tarea.
+-   **Nivel de Dificultad:** Clasificación que indica la complejidad de la tarea.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Cada tarea nueva se agrega inicialmente como pendiente o no completada.
 
-## Build
+## Funcionalidades Principales
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Después de ingresar una nueva tarea, la aplicación proporciona las siguientes funcionalidades:
 
-## Running unit tests
+-   **Eliminar:** La capacidad de eliminar una tarea de la lista.
+-   **Editar:** Permite modificar los detalles de una tarea existente.
+-   **Cambiar Estado de Completada:** Alternar entre el estado de completada y no completada, brindando flexibilidad en la gestión de tareas.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Sistema de Filtros Integrado
 
-## Running end-to-end tests
+La Lista de Tareas cuenta con un sistema de filtros para optimizar la experiencia del usuario, permitiendo visualizar distintos conjuntos de tareas:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+-   **Todas las Tareas:** Muestra la lista completa de tareas.
+-   **Todas las Tareas Fáciles:** Filtra y muestra solo las tareas clasificadas como fáciles.
+-   **Todas las Tareas Normales:** Presenta las tareas con nivel de dificultad normal.
+-   **Todas las Tareas Difíciles:** Filtra y muestra exclusivamente las tareas con nivel de dificultad alto.
+-   **Todas las Tareas Completadas:** Muestra únicamente las tareas que se han marcado como completadas.
+-   **Todas las Tareas Sin Completar:** Filtra y presenta las tareas que aún no han sido completadas.
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Este sistema de filtros ofrece una experiencia de usuario personalizada y eficiente, permitiendo a los usuarios visualizar y gestionar sus tareas de manera más efectiva.
