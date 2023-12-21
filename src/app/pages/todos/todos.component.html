@@ -1,4 +1,4 @@
-<section>
+<section class="container__todos">
     <form class="todo__form" (ngSubmit)="onSubmit()" [formGroup]="todoForm">
         <h2>
             @if (currentTodoUpdate) {
@@ -21,9 +21,23 @@
         <label class="form__control">
             Desciption todo
             <input type="text" placeholder="ej: Debo aprender angular" formControlName="desc">
-            @if (todoForm.get('desc')?.touched && todoForm.get('name')?.errors?.['required']) {
+            @if (todoForm.get('desc')?.touched && todoForm.get('desc')?.errors?.['required']) {
             <p class="control__error">Este campo es requerido</p>
             }
+        </label>
+
+        <label class="form__control">
+            Dificultad todo
+            <select formControlName="difficulty">
+                <option disabled>Escoge uno</option>
+                <option value="easy">Fácil</option>
+                <option value="medium">Normal</option>
+                <option value="hard">Difícil</option>
+            </select>
+            @if (todoForm.get('difficulty')?.touched && todoForm.get('difficulty')?.errors?.['required']) {
+            <p class="control__error">Este campo es requerido</p>
+            }
+
         </label>
 
         <button [class]="'btn ' + (currentTodoUpdate ? 'btn_update' : 'btn_create')" [disabled]="todoForm.invalid">
@@ -36,33 +50,66 @@
     </form>
 
     <section>
-        <h2>Lista de tareas</h2>
+        <div class="header__todos">
+            <h2>Lista de tareas</h2>
+            @if (todosFlag.length) {
+            <div class="content_filtros">
+                <h5 class="filters__title" (click)="handleShowFilters()">
+                    <i class='bx bx-filter'></i>
+                    Filtros
+                </h5>
 
+                <ul [class]="'filters ' + (showFilters && 'filters--show')">
+                    <li (click)="handleFilters('easy')">Todos faciles</li>
+                    <li (click)="handleFilters('medium')">Todos normales</li>
+                    <li (click)="handleFilters('hard')">Todos dificiles</li>
+                    <li (click)="handleFilters('completed')">Todos completados</li>
+                    <li (click)="handleFilters('nocompleted')">Todos sin completar</li>
+                    <li (click)="handleFilters('all')">Mostrarlos todos</li>
+                </ul>
+            </div>
+            }
+        </div>
 
         <ul class="todos">
             @for (todo of todos; track todo.id) {
             <li class="todo">
-                <div>
+                <div class="todo__info">
                     <p class="todo_title">
                         {{todo.title}}
+                        @switch (todo.difficulty) {
+                        @case ("easy") {
+                        <span class="todo_difficulty todo_easy">Fácil</span>
+                        }
+                        @case ("medium") {
+                        <span class="todo_difficulty todo_medium">Normal</span>
+                        }
+                        @case ("hard") {
+                        <span class="todo_difficulty todo_hard">Difícil</span>
+                        }
+                        }
                     </p>
                     <button (click)="completeStateTodo(todo.id)"
                         [class]="'btn ' + (todo.stateTodo ? 'todo_completed' : 'todo_Nocompleted')">
                         @if (todo.stateTodo) {
-                        Completada
+                        <span>Completada</span> <i class='bx bx-check-circle'></i>
                         } @else {
-                        Sin completar
+                        <span>Sin completar </span><i class='bx bx-x-circle'></i>
                         }
                     </button>
                     <p class="todo_dec">{{todo.desc}}</p>
                 </div>
                 <div class="options">
-                    <button class="btn btn_edit" (click)="handleUpdate(todo)">Editar</button>
-                    <button class="btn btn_delete" (click)="deleteTodo(todo.id)">Eliminar</button>
+                    <button class="btn btn_edit" (click)="handleUpdate(todo)">
+                        <i class='bx bx-edit'></i>
+                    </button>
+                    <button class="btn btn_delete" (click)="deleteTodo(todo.id)">
+                        <i class='bx bxs-trash'></i>
+                    </button>
                 </div>
             </li>
             }@empty {
-            <p>No hay tareas que mostrar</p>
+            <p class="alert alert--info">No hay tareas que mostrar</p>
             }
         </ul>
     </section>

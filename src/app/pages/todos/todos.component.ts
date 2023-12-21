@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { Todo } from '../../interfaces/todo';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Todo, typeFilter } from '../../interfaces/todo';
 import { TodosService } from './todosService.service';
 import {
     FormBuilder,
@@ -17,21 +17,23 @@ import {
     styleUrl: './todos.component.css',
 })
 export class TodosComponent implements OnInit {
-    public todos: Todo[] = [];
-    public todoForm!: FormGroup;
-    public currentTodoUpdate?: Todo;
-
     private todoService = inject(TodosService);
     private formBuilder = inject(FormBuilder);
 
-    ngOnInit(): void {
-        this.todos = this.todoService.getTodos();
+    public todosFlag = this.todoService.getTodos();
+    public todos = this.todoService.getTodos();
 
+    public showFilters = false;
+
+    public todoForm!: FormGroup;
+    public currentTodoUpdate?: Todo;
+
+    ngOnInit(): void {
         this.todoForm = this.initForm();
     }
 
     getTodos(): Todo[] {
-        return this.getTodos();
+        return this.todoService.getTodos();
     }
 
     getTodo(id: string): Todo | undefined {
@@ -78,6 +80,7 @@ export class TodosComponent implements OnInit {
         this.todoForm.reset();
     }
 
+    // prueba
     onPathValue() {
         this.todoForm.patchValue({
             title: 'perro perro',
@@ -90,13 +93,35 @@ export class TodosComponent implements OnInit {
         this.todoForm.patchValue({
             title: this.currentTodoUpdate.title,
             desc: this.currentTodoUpdate.desc,
+            difficulty: this.currentTodoUpdate.difficulty,
         });
+    }
+
+    handleFilters(type: typeFilter) {
+        if (type === 'easy' || type === 'medium' || type === 'hard') {
+            this.todos = this.getTodos().filter(
+                (todo) => todo.difficulty === type
+            );
+        } else if (type === 'completed') {
+            this.todos = this.getTodos().filter((todo) => todo.stateTodo);
+        } else if (type === 'nocompleted') {
+            this.todos = this.getTodos().filter((todo) => !todo.stateTodo);
+        } else if (type === 'all') {
+            this.todos = this.getTodos();
+        }
+
+        this.handleShowFilters();
+    }
+
+    handleShowFilters() {
+        this.showFilters = !this.showFilters;
     }
 
     initForm(): FormGroup {
         return this.formBuilder.group({
             title: ['', [Validators.required, Validators.minLength(5)]],
             desc: ['', Validators.required],
+            difficulty: ['', [Validators.required]],
         });
     }
 }
